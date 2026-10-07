@@ -1,0 +1,27 @@
+[package]
+name = "pith-audio"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/pith-hash/pith-audio"
+homepage = "https://github.com/pith-hash/pith-audio"
+description = "Audio fingerprinting: RIFF/WAVE and FLAC decode, Shazam-style spectral-peak signatures and delta-t histogram matching"
+readme = "README.md"
+categories = ["algorithms", "cryptography"]
+keywords = ["audio", "wav", "fingerprinting", "decoder", "pcm", "hashing"]
+
+[dependencies]
+pith-digest = { git = "https://github.com/pith-hash/pith-digest.git", branch = "main" }
+pith-flac = { git = "https://github.com/pith-hash/pith-flac.git", branch = "main" }
+pith-math = { git = "https://github.com/pith-hash/pith-math.git", branch = "main" }
+
+# Vector generator: regenerates reference.json (CI verifies it is current,
+# CD ships it with the SDK artifacts).
+[[bin]]
+name = "gen-reference"
+path = "tools/gen-reference/main.rs"
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "deny"

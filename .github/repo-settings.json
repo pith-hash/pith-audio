@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tier": 1,
+  "description": "Audio fingerprinting: RIFF/WAVE and FLAC decode, Shazam-style spectral-peak signatures and delta-t histogram matching",
+  "homepage": "https://github.com/pith-hash/pith-audio",
+  "topics": [
+    "rust",
+    "audio",
+    "fingerprinting",
+    "decoder",
+    "pcm",
+    "hashing"
+  ]
+}
