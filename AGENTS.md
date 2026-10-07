@@ -4,7 +4,7 @@
 
 - Repo: `pith-hash/pith-audio`
 - Description: Audio fingerprinting: RIFF/WAVE and FLAC decode, Shazam-style spectral-peak signatures and delta-t histogram matching
-- License: Apache-2.0
+- License: MIT
 
 ## Build & Test
 
