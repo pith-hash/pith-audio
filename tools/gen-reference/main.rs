@@ -4,9 +4,9 @@
 //! Every vector is computed through the crate's public API from inputs
 //! that are either the committed conformance fixture
 //! (`tests/fixtures/tone.wav`) or synthetic streams built byte-by-byte
-//! in [`builder`] — no RNG beyond the fixed SplitMix64 stream, no time,
-//! no transcendentals, no platform-dependent bytes — so the output is
-//! byte-stable everywhere.
+//! here from [`pith_audio::reference`]'s SplitMix64 synthesis — no RNG
+//! beyond the fixed SplitMix64 stream, no time, no transcendentals, no
+//! platform-dependent bytes — so the output is byte-stable everywhere.
 //!
 //! Numeric policy: this crate's vectors record only *discrete* values
 //! (integer PCM samples, peak `(t, f)` sets, fingerprints, hashes).
@@ -28,14 +28,12 @@ use std::fs;
 use std::path::PathBuf;
 use std::process::ExitCode;
 
+use pith_audio::reference::{mono_average, voices_samples, voices_samples_stereo};
 use pith_audio::wav;
 use pith_audio::{Match, Signature, build_index, match_signature, signature, signature_of_wav};
 use pith_digest::{fnv1a64, sha256};
 
-use builder::{
-    chunk, fmt_chunk, mono_average, pcm_wav, pcm16_data, voices_samples, voices_samples_stereo,
-    wav_file,
-};
+use builder::{chunk, fmt_chunk, pcm_wav, pcm16_data, wav_file};
 
 /// Where the committed copy lives, relative to the repository root.
 const REFERENCE_PATH: &str = "reference.json";
@@ -750,7 +748,7 @@ fn run(mode: &str) -> ExitCode {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::builder::SplitMix64;
+    use pith_audio::reference::SplitMix64;
 
     /// The fixture's ground-truth values, pinned here so a port
     /// regression cannot quietly rewrite them.

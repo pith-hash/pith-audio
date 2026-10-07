@@ -1,0 +1,34 @@
+{
+  "name": "@pith-hash/pith-audio",
+  "version": "0.1.0",
+  "description": "Audio fingerprinting SDK: RIFF/WAVE decode, spectral-peak signatures and delta-t matching via the pith-audio Rust cdylib (koffi, prebuilt)",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "prebuilds/",
+    "reference.json"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "koffi": "^2.12.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pith-hash/pith-audio.git",
+    "directory": "sdk/node"
+  },
+  "keywords": [
+    "audio",
+    "wav",
+    "fingerprinting",
+    "decoder",
+    "pcm",
+    "hashing"
+  ]
+}
