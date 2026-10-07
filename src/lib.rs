@@ -36,6 +36,16 @@ mod peaks;
 mod table;
 
 pub mod ffi;
+// The Java SDK's native-method surface: `Java_hash_pith_audio_*`
+// exports that forward to the C ABI above. Compiled out of the
+// unit-test build (the `#[no_mangle]` exports would collide with the
+// test binary's copies) and out of `--no-default-features` builds (the
+// glue needs `std` allocations); `tests/java_ffi.rs` covers the glue
+// against a synthetic JNI environment instead. Private module: the JVM
+// links the exports by symbol name, so nothing here needs to be
+// publicly nameable in Rust.
+#[cfg(all(not(test), feature = "std"))]
+mod ffi_jni;
 pub mod reference;
 pub mod wav;
 
