@@ -23,9 +23,9 @@ default = ["std"]
 std = []
 
 [dependencies]
-pith-digest = { git = "https://github.com/pith-hash/pith-digest.git", branch = "main" }
-pith-flac = { git = "https://github.com/pith-hash/pith-flac.git", branch = "main" }
-pith-math = { git = "https://github.com/pith-hash/pith-math.git", branch = "main" }
+pith-digest = { version = "0.1", git = "https://github.com/pith-hash/pith-digest.git", branch = "main" }
+pith-flac = { version = "0.1", git = "https://github.com/pith-hash/pith-flac.git", branch = "main" }
+pith-math = { version = "0.1", git = "https://github.com/pith-hash/pith-math.git", branch = "main" }
 
 # Vector generator: regenerates reference.json (CI verifies it is current,
 # CD ships it with the SDK artifacts).
