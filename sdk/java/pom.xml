@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>hash.pith</groupId>
+  <groupId>io.github.pith-hash</groupId>
   <artifactId>pith-audio</artifactId>
   <version>0.1.0</version>
   <packaging>jar</packaging>
@@ -16,6 +16,13 @@
       <url>https://github.com/pith-hash/pith-audio/blob/main/LICENSE</url>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <id>pith-hash</id>
+      <name>pith-hash</name>
+      <url>https://github.com/pith-hash</url>
+    </developer>
+  </developers>
   <scm>
     <url>https://github.com/pith-hash/pith-audio</url>
     <connection>scm:git:git://github.com/pith-hash/pith-audio.git</connection>
@@ -50,4 +57,77 @@
       </plugin>
     </plugins>
   </build>
+
+  <!--
+    Release lane: everything Maven Central requires (sources jar, javadoc
+    jar, GPG signatures) plus the Central Portal publisher. Kept in a
+    profile so plain `mvn test` / `mvn package` never needs GPG or
+    registry credentials. Activate with `mvn -Prelease deploy`; the
+    publisher reads settings.xml server id `central` (CI: setup-java's
+    server-id mapping).
+  -->
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.4.0</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.12.0</version>
+            <configuration>
+              <!-- The JNI bindings are deliberately terse; doclint failures
+                   must not block a Central release. -->
+              <doclint>none</doclint>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.8</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.11.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
