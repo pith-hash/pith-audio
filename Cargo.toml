@@ -9,7 +9,7 @@ homepage = "https://github.com/pith-hash/pith-audio"
 description = "Audio fingerprinting: RIFF/WAVE and FLAC decode, Shazam-style spectral-peak signatures and delta-t histogram matching"
 readme = "README.md"
 categories = ["algorithms", "cryptography"]
-keywords = ["audio", "wav", "fingerprinting", "decoder", "pcm", "hashing"]
+keywords = ["audio", "wav", "fingerprinting", "pcm", "hashing"]
 
 [lib]
 # The cdylib is the binary every language SDK binds through (ctypes,
