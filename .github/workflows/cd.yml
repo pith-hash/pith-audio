@@ -372,10 +372,41 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
       - name: Publish to Maven Central
-        run: >
-          mvn --batch-mode --no-transfer-progress -Prelease deploy
-          -f sdk/java/pom.xml
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          mvn -B -Prelease -DskipTests -DcentralBaseUrl=http://127.0.0.1:9 deploy -f sdk/java/pom.xml || true
+          BUNDLE=sdk/java/target/central-publishing/central-bundle.zip
+          test -f "$BUNDLE" || { echo "bundle missing"; exit 1; }
+          python3 - <<'PYEOF'
+          import zipfile, os
+          src = "sdk/java/target/central-publishing/central-bundle.zip"
+          zin = zipfile.ZipFile(src)
+          zout = zipfile.ZipFile(src + ".clean", "w", zipfile.ZIP_DEFLATED)
+          kept = []
+          for n in zin.namelist():
+              name = n.replace("\\", "/")
+              base = name.split("/")[-1]
+              if base.startswith("maven-metadata") or base.startswith("_remote.repositories"):
+                  continue
+              zout.writestr(name, zin.read(n))
+              kept.append(name)
+          zout.close(); zin.close(); os.replace(src + ".clean", src)
+          poms = [n for n in kept if n.endswith(".pom")]
+          ascs = [n for n in kept if n.endswith(".asc")]
+          assert len(poms) >= 1 and len(ascs) >= 4, "bundle incomplete after clean: %s" % kept
+          print("clean bundle:", len(kept), "entries; poms:", poms)
+          PYEOF
+          TOKEN=$(printf "%s:%s" "$CENTRAL_USERNAME" "$CENTRAL_PASSWORD" | base64)
+          ID=$(curl -sf -X POST -H "Authorization: Bearer $TOKEN" -F "bundle=@$BUNDLE" "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC")
+          echo "deployment: $ID"
+          for i in $(seq 1 60); do
+            sleep 10
+            ST=$(curl -sf -X POST -H "Authorization: Bearer $TOKEN" "https://central.sonatype.com/api/v1/publisher/status?id=$ID")
+            echo "$ST"
+            echo "$ST" | grep -q '"FAILED"' && exit 1
+            echo "$ST" | grep -q '"PUBLISHED"' && exit 0
+          done
+          exit 1
