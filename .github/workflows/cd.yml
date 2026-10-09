@@ -369,13 +369,13 @@ jobs:
           server-id: central
           server-username: CENTRAL_USERNAME
           server-password: CENTRAL_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-private-key: ${{ secrets.CENTRAL_GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
       - name: Publish to Maven Central
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_PASSPHRASE: ${{ secrets.CENTRAL_GPG_PASSPHRASE }}
         run: |
           mvn -B -Prelease -DskipTests -DcentralBaseUrl=http://127.0.0.1:9 deploy -f sdk/java/pom.xml || true
           BUNDLE=sdk/java/target/central-publishing/central-bundle.zip
