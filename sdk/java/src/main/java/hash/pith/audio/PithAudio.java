@@ -214,6 +214,11 @@ public final class PithAudio {
                 }
             }
         }
+        String bundled = BundledNative.extract(CDYLIB_NAMES);
+        if (bundled != null) {
+            return bundled;
+        }
+
         Path cwd = Paths.get("").toAbsolutePath();
         for (int up = 0; up <= 6; up++) {
             Path base = cwd;
@@ -236,6 +241,7 @@ public final class PithAudio {
         throw new LinkageError(
             "cannot locate the pith-audio cdylib; set PITH_CDYLIB or PITH_CDYLIB_DIR"
                 + " (probed PITH_CDYLIB, PITH_CDYLIB_DIR, and target/release at "
-                + cwd + " and its ancestors)");
+                + cwd + " and its ancestors)"
+                + BundledNative.platformNote());
     }
 }
