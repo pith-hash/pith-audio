@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.pith-hash</groupId>
   <artifactId>pith-audio</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-beta.1</version>
   <packaging>jar</packaging>
   <name>pith-audio</name>
   <description>Java JNI bindings for the pith-audio cdylib: WAV/PCM audio fingerprinting, SplitMix64 voice synthesis, and offset-match indexing (hex-exact vs reference.json)</description>
