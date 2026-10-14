@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pith-audio"
-version = "0.1.1-beta.1"
+version = "0.1.1"
 description = "Audio fingerprinting SDK: RIFF/WAVE decode, spectral-peak signatures and delta-t matching via the pith-audio Rust cdylib (ctypes, zero-dep)"
 license = "MIT"
 requires-python = ">=3.9"
